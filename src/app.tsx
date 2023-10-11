@@ -44,7 +44,7 @@ const Autocomplete = memo(() => {
 
       <input type="text" class="border rounded-lg p-2 w-48" value={searchTerm} onInput={handleInputChange} />
       {suggestions.length > 0 ? (
-        <ul class="relative z-10 w-48 mt-2 bg-white-200  text-white border rounded-lg">
+        <ul class="relative empty:hidden z-10 w-48 mt-2 bg-white-200  text-white border rounded-lg">
           {suggestions.map((suggestion) => (
             <li
               class="p-2 cursor-pointer hover:bg-white-600 hover:text-bold hover:border border-white-solid"
@@ -54,9 +54,7 @@ const Autocomplete = memo(() => {
             </li>
           ))}
         </ul>
-      ) : searchTerm !== "" && suggestions.length === 0 ? (
-        <p>No Result Found</p>
-      ) : (
+      ) : 
         ""
       )}
     </div>
