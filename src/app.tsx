@@ -1,7 +1,9 @@
 import { memo } from "preact/compat";
 import { useMemo, useState } from "preact/hooks";
 import SUGGESTIONDATA from "./configs/suggestedItems.json";
+
 const Autocomplete = memo(() => {
+  let inputTimeOut: number | undefined;
   const [searchTerm, setSearchTerm] = useState("");
   const [suggestions, setSuggestions] = useState<string[]>([]);
 
@@ -19,14 +21,16 @@ const Autocomplete = memo(() => {
     }
     return filteredData;
   }, [searchTerm]);
-
   const handleInputChange = (event: Event) => {
     const input = event.target as HTMLInputElement;
     const value = input.value;
     setSearchTerm(value);
     if (value === "") return setSuggestions([]);
 
-    setSuggestions(filteredSuggestions);
+    clearTimeout(inputTimeOut);
+    inputTimeOut = setTimeout(() => {
+      setSuggestions(filteredSuggestions);
+    }, 1000);
   };
 
   const handleSuggestionClick = (suggestion: string) => {
@@ -39,14 +43,21 @@ const Autocomplete = memo(() => {
       <h1 class="text-3xl">Autocomplete Dropdown</h1>
 
       <input type="text" class="border rounded-lg p-2 w-48" value={searchTerm} onInput={handleInputChange} />
-      {suggestions.length > 0 && (
+      {suggestions.length > 0 ? (
         <ul class="relative z-10 w-48 mt-2 bg-white-200  text-white border rounded-lg">
           {suggestions.map((suggestion) => (
-            <li class="p-2 cursor-pointer hover:bg-white-600 hover:text-bold hover:border border-white-solid" onClick={() => handleSuggestionClick(suggestion)}>
+            <li
+              class="p-2 cursor-pointer hover:bg-white-600 hover:text-bold hover:border border-white-solid"
+              onClick={() => handleSuggestionClick(suggestion)}
+            >
               {suggestion}
             </li>
           ))}
         </ul>
+      ) : searchTerm !== "" && suggestions.length === 0 ? (
+        <p>No Result Found</p>
+      ) : (
+        ""
       )}
     </div>
   );
