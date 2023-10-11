@@ -56,7 +56,7 @@ const Autocomplete = memo(() => {
         </ul>
       ) : 
         ""
-      )}
+      }
     </div>
   );
 });
